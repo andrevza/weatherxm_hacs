@@ -1,0 +1,16 @@
+{
+  "domain": "weatherxm_gateway",
+  "name": "WeatherXM Gateway Local",
+  "codeowners": ["@andrevza"],
+  "config_flow": true,
+  "documentation": "https://github.com/andrevza/weatherxm_hacs#readme",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/andrevza/weatherxm_hacs/issues",
+  "version": "0.1.0",
+  "zeroconf": [
+    {
+      "type": "_weatherxm._tcp.local."
+    }
+  ]
+}

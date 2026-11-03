@@ -1,0 +1,32 @@
+{
+  "wifi_status": "CONNECTED",
+  "wifi_rssi": -29,
+  "is_paired": true,
+  "paired_id": 142857,
+  "station_type": 1001,
+  "station_fw_ver": 0,
+  "packet_reception": 100,
+  "lora_link_ok": true,
+  "activity_status": "ACTIVE_OK",
+  "recent_stations": [{"id": 142857, "rssi": -74, "snr": -3}],
+  "weather": {
+    "has_weather": true,
+    "temp": 16.28,
+    "feels_like": 16.28,
+    "humidity": 91.8,
+    "pressure": 856.52,
+    "wind_speed": 2.1,
+    "wind_gust": 2.5,
+    "wind_dir_deg": 180,
+    "precip_rate": 0,
+    "precip_daily": 0.25,
+    "precip_cml": 1587.25,
+    "precip_24h": 14.99,
+    "uv": 0,
+    "irradiance": 4.1,
+    "unit_temp": "C",
+    "unit_wind": "m/s",
+    "unit_precip": "mm",
+    "unit_press": "hPa"
+  }
+}

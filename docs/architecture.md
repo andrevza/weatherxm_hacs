@@ -1,0 +1,9 @@
+# Architecture
+
+Reference firmware was inspected from WeatherXM `wg1200-firmware` commit `a30374b045c138dac3f6dd4267ef8eb7390a7670`, in `main/ws/web_server.cpp`. `/api/v1/info` exposes `gateway_id`/`id`, model and firmware, Wi-Fi details, station metadata and `station.packet_reception`. The parser tolerates the older `station.reception` spelling. `/api/v1/observations` returns current fields and unit metadata; `/status` supplies RF link diagnostics and `recent_stations` RSSI/SNR. `/api/v1/history` is a parallel-array API and is intentionally only available through the client; importing it into Recorder is not part of this release.
+
+The config flow supports manual host/port setup and native Home Assistant Zeroconf discovery for `_weatherxm._tcp.local.`. Both paths verify the model and stable gateway ID through `/api/v1/info`. Config entries use the gateway ID for registry identity, and discovery updates the stored endpoint when the address changes.
+
+One shared Home Assistant `aiohttp` session backs a read-only REST client. The client blocks redirects, applies an 8-second timeout and a 256 KiB response cap, checks JSON object shapes, and normalizes known API units to canonical native units. Separate `DataUpdateCoordinator` instances poll observations at 20 seconds and diagnostic endpoints at 60 seconds by default. Options changes reload the entry. Sensor, binary sensor and native weather platforms use coordinator data only; no background tasks or historical imports are created.
+
+Observation values become unavailable when `has_weather` is false, a value is null/invalid, or the API timestamp is older than three polling periods (with a 180-second floor). The native weather entity reports observations only; it never invents a condition or forecast. Battery entities are not created because REST availability is unconfirmed.

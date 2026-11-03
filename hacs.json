@@ -1,0 +1,5 @@
+{
+  "name": "WeatherXM Gateway Local",
+  "homeassistant": "2026.10.4",
+  "render_readme": true
+}

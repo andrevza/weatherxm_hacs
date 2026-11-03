@@ -1,0 +1,73 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to a WeatherXM gateway",
+        "description": "Enter the gateway hostname or IP address. The integration connects to its local read-only API.",
+        "data": {
+          "host": "Host or IP address",
+          "port": "HTTP port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to the gateway.",
+      "invalid_response": "The gateway returned an invalid response.",
+      "invalid_host": "Enter a valid hostname or IP address.",
+      "unsupported_device": "This device is not a supported WeatherXM WG1200 gateway.",
+      "missing_id": "The gateway did not provide a stable identifier."
+    },
+    "abort": {
+      "already_configured": "This WeatherXM gateway is already configured.",
+      "unsupported_device": "This device is not a supported WeatherXM WG1200 gateway.",
+      "cannot_connect": "Unable to verify the discovered gateway.",
+      "invalid_device": "The discovered gateway identity did not match its API response."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Polling intervals",
+        "data": {
+          "scan_interval": "Weather update interval (seconds)",
+          "diagnostic_interval": "Gateway diagnostics interval (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {"name": "Temperature"},
+      "feels_like": {"name": "Feels like"},
+      "humidity": {"name": "Humidity"},
+      "pressure": {"name": "Atmospheric pressure"},
+      "wind_speed": {"name": "Wind speed"},
+      "wind_gust": {"name": "Wind gust"},
+      "wind_direction": {"name": "Wind direction"},
+      "rainfall_rate": {"name": "Rainfall rate"},
+      "daily_rainfall": {"name": "Daily rainfall"},
+      "rolling_rainfall": {"name": "Rolling 24-hour rainfall"},
+      "lifetime_rainfall": {"name": "Lifetime rainfall"},
+      "uv_index": {"name": "UV index"},
+      "solar_irradiance": {"name": "Solar irradiance"},
+      "packet_reception": {"name": "Packet reception"},
+      "wifi_rssi": {"name": "Wi-Fi signal strength"},
+      "wifi_state": {"name": "Wi-Fi state"},
+      "firmware_version": {"name": "Gateway firmware"},
+      "api_version": {"name": "Gateway API version"},
+      "station_type": {"name": "Paired station type"},
+      "station_firmware": {"name": "Station firmware version"},
+      "paired_station_id": {"name": "Paired station identifier"},
+      "station_rssi": {"name": "Station radio signal strength"},
+      "station_snr": {"name": "Station radio signal-to-noise ratio"},
+      "observation_timestamp": {"name": "Latest observation"}
+    },
+    "binary_sensor": {
+      "wifi_connected": {"name": "Wi-Fi connected"},
+      "station_communicating": {"name": "Station communicating"}
+    },
+    "weather": {
+      "current": {"name": "Weather"}
+    }
+  }
+}

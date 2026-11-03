@@ -1,0 +1,18 @@
+{
+  "id": "WXM-SANITIZED",
+  "gateway_id": "WXM-SANITIZED",
+  "model": "WXM-WG1200",
+  "hardware": "WXM-WG1200",
+  "firmware": "0.8.34",
+  "api_version": "1.0.0",
+  "device_name": "Sanitized WG1200",
+  "station": {
+    "is_paired": true,
+    "paired_id": 142857,
+    "station_type": 1001,
+    "station_fw_version": 0,
+    "packet_reception": 100
+  },
+  "wifi": {"status": "CONNECTED", "rssi": -29},
+  "units": {"temp": "°C", "wind": "m/s", "precip": "mm", "press": "hPa"}
+}
