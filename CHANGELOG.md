@@ -14,6 +14,7 @@ Notable changes to WeatherXM Gateway Local are recorded here. This project is in
 ### Changed
 
 - Frequently changing diagnostic entities, including Latest observation, uptime, counters, and packet age, are disabled by default to reduce Activity and Recorder noise.
+- Documented the WeatherXM WG1200 firmware update path and compatibility caution.
 
 ## [0.1.0]
 
