@@ -27,10 +27,14 @@
   "options": {
     "step": {
       "init": {
-        "title": "Polling intervals",
+        "title": "Weather and diagnostics options",
         "data": {
           "scan_interval": "Weather update interval (seconds)",
-          "diagnostic_interval": "Gateway diagnostics interval (seconds)"
+          "diagnostic_interval": "Gateway diagnostics interval (seconds)",
+          "estimate_condition": "Estimate weather condition from station readings"
+        },
+        "data_description": {
+          "estimate_condition": "Opt in to estimated rain, wind, and sunshine conditions. Cloud cover is not measured, so partly cloudy and clear night are never inferred."
         }
       }
     }

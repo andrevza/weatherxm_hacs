@@ -23,6 +23,7 @@ from .api import (
 )
 from .const import (
     CONF_DIAGNOSTIC_INTERVAL,
+    CONF_ESTIMATE_CONDITION,
     CONF_PORT,
     CONF_SCAN_INTERVAL,
     DEFAULT_DIAGNOSTIC_INTERVAL,
@@ -169,6 +170,12 @@ class WeatherXMOptionsFlow(config_entries.OptionsFlow):
                     int,
                     vol.Range(min=MIN_DIAGNOSTIC_INTERVAL, max=MAX_DIAGNOSTIC_INTERVAL),
                 ),
+                vol.Required(
+                    CONF_ESTIMATE_CONDITION,
+                    default=self.config_entry.options.get(
+                        CONF_ESTIMATE_CONDITION, False
+                    ),
+                ): bool,
             }
         )
         return self.async_show_form(step_id="init", data_schema=schema)

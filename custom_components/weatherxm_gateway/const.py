@@ -16,6 +16,7 @@ MAX_RESPONSE_BYTES = 256_000
 CONF_PORT = "port"
 CONF_SCAN_INTERVAL = "scan_interval"
 CONF_DIAGNOSTIC_INTERVAL = "diagnostic_interval"
+CONF_ESTIMATE_CONDITION = "estimate_condition"
 SERVICE_TYPE = "_weatherxm._tcp.local."
 MODEL = "WXM-WG1200"
 PLATFORMS_INTERVALS = {"weather": timedelta(seconds=DEFAULT_SCAN_INTERVAL)}

@@ -13,7 +13,7 @@ from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.weatherxm_gateway.api import GatewayApi
-from custom_components.weatherxm_gateway.const import DOMAIN
+from custom_components.weatherxm_gateway.const import CONF_ESTIMATE_CONDITION, DOMAIN
 
 
 @pytest.fixture(autouse=True)
@@ -148,9 +148,19 @@ async def test_options_flow_sets_polling_intervals(
     )
     entry.add_to_hass(hass)
     flow = await hass.config_entries.options.async_init(entry.entry_id)
+    defaults = flow["data_schema"]({})
+    assert defaults[CONF_ESTIMATE_CONDITION] is False
     result = await hass.config_entries.options.async_configure(
         flow["flow_id"],
-        user_input={"scan_interval": 30, "diagnostic_interval": 120},
+        user_input={
+            "scan_interval": 30,
+            "diagnostic_interval": 120,
+            CONF_ESTIMATE_CONDITION: True,
+        },
     )
     assert result["type"] == "create_entry"
-    assert result["data"] == {"scan_interval": 30, "diagnostic_interval": 120}
+    assert result["data"] == {
+        "scan_interval": 30,
+        "diagnostic_interval": 120,
+        CONF_ESTIMATE_CONDITION: True,
+    }
