@@ -3,9 +3,13 @@
   "gateway_id": "WXM-SANITIZED",
   "model": "WXM-WG1200",
   "hardware": "WXM-WG1200",
+  "mac": "02:11:22:33:44:55",
   "firmware": "0.8.34",
   "api_version": "1.0.0",
   "device_name": "Sanitized WG1200",
+  "uptime_sec": 43210,
+  "edition": "wxm",
+  "freq_region": "868",
   "station": {
     "is_paired": true,
     "paired_id": 142857,
@@ -13,6 +17,6 @@
     "station_fw_version": 0,
     "packet_reception": 100
   },
-  "wifi": {"status": "CONNECTED", "rssi": -29},
+  "wifi": {"status": "CONNECTED", "rssi": -29, "ssid": "Example network", "ip": "192.0.2.45"},
   "units": {"temp": "°C", "wind": "m/s", "precip": "mm", "press": "hPa"}
 }

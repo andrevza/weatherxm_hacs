@@ -45,11 +45,24 @@
       "firmware_version": {"name": "Gateway firmware"}, "api_version": {"name": "Gateway API version"},
       "station_type": {"name": "Paired station type"}, "station_firmware": {"name": "Station firmware version"},
       "paired_station_id": {"name": "Paired station identifier"}, "station_rssi": {"name": "Station radio signal strength"},
-      "station_snr": {"name": "Station radio signal-to-noise ratio"}, "observation_timestamp": {"name": "Latest observation"}
+      "station_snr": {"name": "Station radio signal-to-noise ratio"},
+      "gateway_uptime": {"name": "Gateway uptime"}, "rx_packet_total": {"name": "LoRa received packets"},
+      "mqtt_success_count": {"name": "MQTT successful publishes"}, "mqtt_fail_count": {"name": "MQTT failed publishes"},
+      "station_packet_age": {"name": "Last station packet age"}, "activity_state": {"name": "Gateway activity state"},
+      "listen_frequency": {"name": "LoRa receive frequency"}, "pairing_state": {"name": "Pairing state"},
+      "ownership_status": {"name": "Ownership status"}, "sd_capacity": {"name": "SD card capacity"},
+      "sd_filesystem": {"name": "SD card filesystem"}, "sd_status_reason": {"name": "SD card status reason"},
+      "observation_timestamp": {"name": "Latest observation"}
     },
     "binary_sensor": {
       "wifi_connected": {"name": "Wi-Fi connected"},
-      "station_communicating": {"name": "Station communicating"}
+      "mqtt_connected": {"name": "MQTT connected"},
+      "station_communicating": {"name": "Station communicating"},
+      "station_paired": {"name": "Weather station paired"},
+      "uplink_active": {"name": "Weather uplink active"},
+      "sd_present": {"name": "SD card present"},
+      "sd_mounted": {"name": "SD card mounted"},
+      "sd_unusable": {"name": "SD card unusable"}
     },
     "weather": {"current": {"name": "Weather"}}
   }

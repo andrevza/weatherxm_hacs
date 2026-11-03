@@ -18,11 +18,14 @@ from homeassistant.const import (
     PERCENTAGE,
     UV_INDEX,
     EntityCategory,
+    UnitOfFrequency,
+    UnitOfInformation,
     UnitOfIrradiance,
     UnitOfPrecipitationDepth,
     UnitOfPressure,
     UnitOfSpeed,
     UnitOfTemperature,
+    UnitOfTime,
     UnitOfVolumetricFlux,
 )
 from homeassistant.core import HomeAssistant
@@ -155,6 +158,16 @@ class DiagnosticDescription(SensorEntityDescription):
     source: str = "info"
 
 
+def _finite_numeric(value: Any) -> bool:
+    """Check untrusted numeric API values without overflowing on huge integers."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
 DIAGNOSTIC_SENSORS = (
     DiagnosticDescription(
         key="packet_reception",
@@ -162,7 +175,6 @@ DIAGNOSTIC_SENSORS = (
         field="packet_reception",
         native_unit_of_measurement=PERCENTAGE,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_category=None,
     ),
     DiagnosticDescription(
         key="wifi_rssi",
@@ -216,6 +228,97 @@ DIAGNOSTIC_SENSORS = (
         state_class=SensorStateClass.MEASUREMENT,
     ),
     DiagnosticDescription(
+        key="mqtt_success_count",
+        translation_key="mqtt_success_count",
+        field="mqtt_success_count",
+        source="status",
+        native_unit_of_measurement="publishes",
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="mqtt_fail_count",
+        translation_key="mqtt_fail_count",
+        field="mqtt_fail_count",
+        source="status",
+        native_unit_of_measurement="publishes",
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="gateway_uptime",
+        translation_key="gateway_uptime",
+        field="uptime_sec",
+        source="uptime",
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="rx_packet_total",
+        translation_key="rx_packet_total",
+        field="rx_packet_total",
+        source="status",
+        native_unit_of_measurement="packets",
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="station_packet_age",
+        translation_key="station_packet_age",
+        field="age_sec",
+        source="recent_station",
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="activity_state",
+        translation_key="activity_state",
+        field="activity_status",
+        source="status",
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="listen_frequency",
+        translation_key="listen_frequency",
+        field="listen_freq_hz",
+        source="status",
+        native_unit_of_measurement=UnitOfFrequency.HERTZ,
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="pairing_state",
+        translation_key="pairing_state",
+        field="pairing_state",
+        source="status",
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="ownership_status",
+        translation_key="ownership_status",
+        field="ownership_status",
+        source="status",
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
+        key="sd_capacity",
+        translation_key="sd_capacity",
+        field="sd_capacity_gb",
+        source="status",
+        device_class=SensorDeviceClass.DATA_SIZE,
+        native_unit_of_measurement=UnitOfInformation.GIGABYTES,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    DiagnosticDescription(
+        key="sd_filesystem",
+        translation_key="sd_filesystem",
+        field="sd_fs_type",
+        source="status",
+    ),
+    DiagnosticDescription(
+        key="sd_status_reason",
+        translation_key="sd_status_reason",
+        field="sd_status_reason",
+        source="status",
+        entity_registry_enabled_default=False,
+    ),
+    DiagnosticDescription(
         key="observation_timestamp",
         translation_key="observation_timestamp",
         field="timestamp",
@@ -255,6 +358,8 @@ def _diagnostic_available(
         return False
     info = data.get("info", {})
     status = data.get("status", {})
+    if not isinstance(info, dict) or not isinstance(status, dict):
+        return False
     if description.source == "info":
         if description.key == "packet_reception":
             station = info.get("station", {})
@@ -276,13 +381,33 @@ def _diagnostic_available(
             description.field in info.get("station", {}) or description.field in status
         )
     if description.source == "recent_station":
-        return any(
-            isinstance(item, dict) and description.field in item
-            for item in status.get("recent_stations", [])
-        )
+        return description.field in _paired_station(info, status)
+    if description.source == "status":
+        return description.field in status
+    if description.source == "uptime":
+        return description.field in info or description.field in status
     if description.source == "observations":
         return True
     return False
+
+
+def _paired_station(info: dict[str, Any], status: dict[str, Any]) -> dict[str, Any]:
+    """Return recent data for the paired station, never an arbitrary station."""
+    station = info.get("station") if isinstance(info.get("station"), dict) else {}
+    paired_id = station.get("paired_id", status.get("paired_id"))
+    if paired_id is None:
+        return {}
+    recent = status.get("recent_stations")
+    if not isinstance(recent, list):
+        return {}
+    return next(
+        (
+            item
+            for item in recent
+            if isinstance(item, dict) and str(item.get("id")) == str(paired_id)
+        ),
+        {},
+    )
 
 
 def diagnostic_available(
@@ -373,16 +498,11 @@ def diagnostic_native_value(
         )
         value = station.get(desc.field, status.get(fallback))
     elif desc.source == "recent_station":
-        paired = station.get("paired_id", status.get("paired_id"))
-        recent = status.get("recent_stations", [])
-        value = next(
-            (
-                item.get(desc.field)
-                for item in (recent if isinstance(recent, list) else [])
-                if isinstance(item, dict) and str(item.get("id")) == str(paired)
-            ),
-            None,
-        )
+        value = _paired_station(info, status).get(desc.field)
+    elif desc.source == "status":
+        value = status.get(desc.field)
+    elif desc.source == "uptime":
+        value = info.get(desc.field, status.get(desc.field))
     elif desc.source == "observations":
         timestamp = (observations or {}).get("timestamp")
         return (
@@ -390,12 +510,24 @@ def diagnostic_native_value(
             if isinstance(timestamp, (int, float)) and not isinstance(timestamp, bool)
             else None
         )
+    if desc.key == "sd_capacity":
+        if status.get("sd_present") is False:
+            return None
+        if not _finite_numeric(value) or value <= 0:
+            return None
+    if desc.key in {
+        "gateway_uptime",
+        "rx_packet_total",
+        "mqtt_success_count",
+        "mqtt_fail_count",
+        "station_packet_age",
+        "listen_frequency",
+    }:
+        if not _finite_numeric(value) or value < 0:
+            return None
     if desc.state_class == SensorStateClass.MEASUREMENT:
-        if isinstance(value, bool) or not isinstance(value, (int, float)):
+        if not _finite_numeric(value):
             return None
-        try:
-            if not math.isfinite(value):
-                return None
-        except OverflowError:
-            return None
+    if isinstance(value, str) and (not value.strip() or len(value) > 128):
+        return None
     return value
