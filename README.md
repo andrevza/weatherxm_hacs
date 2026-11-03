@@ -74,7 +74,7 @@ Include Home Assistant version, integration version, gateway firmware version, r
 
 ## Development
 
-See [docs/architecture.md](docs/architecture.md). The test suite uses mocked responses and does not require a gateway. Run `pytest`, `ruff check .`, and `ruff format --check .` in the project’s Python 3.14 development environment.
+See [docs/architecture.md](docs/architecture.md), [AGENTS.md](AGENTS.md), and the [changelog](CHANGELOG.md). The test suite uses mocked responses and does not require a gateway. Run `pytest`, `ruff check .`, and `ruff format --check .` in the project’s Python 3.14 development environment.
 
 ### Validate captured endpoint responses offline
 
