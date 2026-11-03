@@ -72,7 +72,7 @@ The integration issues only GET requests to `/api/v1/info`, `/api/v1/observation
 
 ## Reporting issues
 
-Include Home Assistant version, integration version, gateway firmware version, relevant endpoint names and redacted example responses. Do not include Wi-Fi credentials or public network details. [Report integration issues here](https://github.com/andrevza/weatherxm_hacs/issues).
+Use the [GitHub issue forms](https://github.com/andrevza/weatherxm_hacs/issues/new/choose) to report bugs or request features. Bug reports ask for Home Assistant, integration, and gateway firmware versions, reproduction steps, and optional redacted diagnostics. Review all shared details and remove gateway or station IDs, MAC addresses, IP addresses, hostnames, Wi-Fi names, credentials, and location details. Do not post raw production API captures.
 
 ## Development
 
