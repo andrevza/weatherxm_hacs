@@ -20,6 +20,8 @@ This is an independent community project. It is not an official WeatherXM integr
 
 The repository is configured for direct HACS custom-repository installation. Inclusion in HACS's default catalog is separate and requires Home Assistant Brands registration and the applicable HACS publishing checks ([HACS publishing requirements](https://www.hacs.dev/docs/publish/integration/)).
 
+The integration ships its own `brand/icon.png` and `brand/icon@2x.png`. Home Assistant 2026.3 and newer use these local files after installation. Some HACS repository views may still show a generic icon for a custom repository; this does not mean the local branding is missing. Home Assistant's Marketplace, available with 2026.11, includes the custom-integration branding display fix.
+
 ### Manual installation
 
 Copy `custom_components/weatherxm_gateway` into `<config>/custom_components/weatherxm_gateway` and restart Home Assistant.
@@ -35,6 +37,8 @@ Use a reachable address from the Home Assistant host. Multiple gateway entries a
 Weather sensors include temperature, feels-like temperature, humidity, pressure, wind speed and gust, wind direction, rainfall rate, daily rainfall, rolling 24-hour rainfall, lifetime rainfall, UV index, and solar irradiance. Daily and rolling rainfall use measurement state semantics because their values can reset or decrease. Only lifetime rainfall uses `total_increasing`.
 
 Diagnostic entities are created when their source fields are available: packet reception, Wi-Fi signal and state, gateway firmware and API versions, paired station type, firmware and ID, station radio RSSI/SNR, latest observation time, and Wi-Fi/station connectivity.
+
+**Latest observation** is disabled by default because its timestamp changes on every weather poll and would otherwise add a routine entry to Home Assistant Activity. Existing installations that already have this entity enabled must disable it once from its entity settings; the default applies when Home Assistant first creates the entity. It keeps its existing unique ID and remains available to enable again when needed. Weather polling, freshness checks, other diagnostics, and weather history are unaffected. Once enabled, its timestamp is recorded like other enabled entities.
 
 The native weather entity exposes measured temperature, apparent temperature, humidity, pressure, wind speed, gust and bearing. It has no forecast and does not infer a sky condition from irradiance, humidity, or rainfall.
 

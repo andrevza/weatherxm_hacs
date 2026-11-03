@@ -221,6 +221,7 @@ DIAGNOSTIC_SENSORS = (
         field="timestamp",
         source="observations",
         device_class=SensorDeviceClass.TIMESTAMP,
+        entity_registry_enabled_default=False,
     ),
 )
 

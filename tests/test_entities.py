@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorStateClass
+from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
 
 from custom_components.weatherxm_gateway.sensor import (
     DIAGNOSTIC_SENSORS,
@@ -62,3 +62,12 @@ def test_diagnostics_without_source_fields_are_not_created() -> None:
     assert not _diagnostic_available(
         {"info": {}, "status": {"recent_stations": []}}, description
     )
+
+
+def test_latest_observation_is_disabled_by_default() -> None:
+    """Keep the timestamp available without filling Activity every poll."""
+    description = next(
+        item for item in DIAGNOSTIC_SENSORS if item.key == "observation_timestamp"
+    )
+    assert description.device_class == SensorDeviceClass.TIMESTAMP
+    assert description.entity_registry_enabled_default is False

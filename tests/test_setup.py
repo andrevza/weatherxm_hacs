@@ -73,6 +73,17 @@ async def test_entry_unload_reload_and_stable_entity_ids(
             item.unique_id == "WXM-LIFECYCLE_weather"
             for item in registry.entities.values()
         )
+        timestamp_entity = next(
+            item
+            for item in registry.entities.values()
+            if item.unique_id == "WXM-LIFECYCLE_observation_timestamp"
+        )
+        assert timestamp_entity.entity_id == "sensor.test_gateway_latest_observation"
+        assert timestamp_entity.disabled_by == er.RegistryEntryDisabler.INTEGRATION
+        registry.async_update_entity(timestamp_entity.entity_id, disabled_by=None)
+        assert await hass.config_entries.async_reload(entry.entry_id)
+        await hass.async_block_till_done()
+        assert hass.states.get(timestamp_entity.entity_id) is not None
         weather_state = next(state for state in hass.states.async_all("weather"))
         assert weather_state.attributes["wind_bearing"] == 0
         assert weather_state.attributes.get("condition") is None
