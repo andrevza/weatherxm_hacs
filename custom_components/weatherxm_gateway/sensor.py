@@ -362,12 +362,10 @@ def _diagnostic_available(
         return False
     if description.source == "info":
         if description.key == "packet_reception":
-            station = info.get("station", {})
+            station = info.get("station")
             return (
-                "packet_reception" in station
-                or "reception" in station
-                or "packet_reception" in status
-            )
+                isinstance(station, dict) and "packet_reception" in station
+            ) or "packet_reception" in status
         if description.key == "firmware_version":
             return "firmware" in info or "fw_version" in info or "fw_version" in status
         return description.field in info
@@ -480,10 +478,7 @@ def diagnostic_native_value(
     value: Any = None
     if desc.source == "info":
         if desc.key == "packet_reception":
-            value = station.get(
-                "packet_reception",
-                station.get("reception", status.get("packet_reception")),
-            )
+            value = station.get("packet_reception", status.get("packet_reception"))
         elif desc.key == "firmware_version":
             value = info.get(
                 "firmware", info.get("fw_version", status.get("fw_version"))

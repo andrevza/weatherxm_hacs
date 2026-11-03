@@ -7,7 +7,7 @@ This is an independent community project. It is not an official WeatherXM integr
 ## Supported hardware and firmware
 
 - WeatherXM WG1200 gateway running firmware with `/api/v1/info`, `/api/v1/observations`, and `/status` endpoints.
-- The API field variants in firmware 0.8.34 and the inspected 0.8.39 source are handled, including both `station.packet_reception` and the older `station.reception` spelling.
+- The API fields in firmware 0.8.34 and the inspected 0.8.39 source are handled, including `station.packet_reception`.
 - Firmware 0.8.34 is known to report an incorrect wind direction in some cases. The integration passes through the gateway's reported direction and cannot repair incorrect firmware readings. Accurate direction requires an upstream firmware fix. Valid 0° North values are retained.
 
 For best compatibility, keep the WG1200 on a current WeatherXM gateway firmware release that provides the local API endpoints above. Use the [WeatherXM WG1200 firmware flasher](https://flasher.weatherxm.com/wg1200) and select its WeatherXM gateway firmware mode. The flasher also offers standalone Meshtastic/MeshCore firmware modes, which replace the WeatherXM gateway application and are not compatible with this integration's local API. Check the release and flasher instructions before updating; this independent integration does not flash devices, and a newly published firmware build is not automatically verified by this project.

@@ -39,8 +39,8 @@ def test_zero_wind_direction_is_a_valid_measurement() -> None:
     assert direction.native_unit_of_measurement == "°"
 
 
-def test_packet_reception_prefers_confirmed_field_and_supports_legacy() -> None:
-    """Create packet reception diagnostics when either known field is present."""
+def test_packet_reception_uses_verified_field_only() -> None:
+    """Read verified packet reception keys without an invented legacy alias."""
     description = next(
         item for item in DIAGNOSTIC_SENSORS if item.key == "packet_reception"
     )
@@ -48,18 +48,18 @@ def test_packet_reception_prefers_confirmed_field_and_supports_legacy() -> None:
     assert _diagnostic_available(
         {"info": {"station": {"packet_reception": 95}}, "status": {}}, description
     )
-    assert _diagnostic_available(
-        {"info": {"station": {"reception": 95}}, "status": {}}, description
-    )
     assert (
         diagnostic_native_value(
-            description, {"station": {"packet_reception": 96, "reception": 95}}, {}, {}
+            description, {"station": {"packet_reception": 96}}, {}, {}
         )
         == 96
     )
+    assert not _diagnostic_available(
+        {"info": {"station": {"reception": 95}}, "status": {}}, description
+    )
     assert (
         diagnostic_native_value(description, {"station": {"reception": 95}}, {}, {})
-        == 95
+        is None
     )
     assert diagnostic_native_value(description, {}, {"packet_reception": 94}, {}) == 94
 

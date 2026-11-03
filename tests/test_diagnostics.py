@@ -137,6 +137,8 @@ async def test_config_and_device_diagnostics_are_redacted_and_serializable(
     assert output["device"]["uptime_sec"] == 3600
     assert output["device"]["sd_capacity_gb"] == 32.0
     assert output["device"]["sd_status_reason"] == "mounted"
+    assert "reception" not in output["available_fields"]["info"]["station"]["present"]
+    assert "reception" not in output["available_fields"]["info"]["station"]["missing"]
     assert output["observations"]["wind_dir_deg"] == 0.0
     assert output["integration"]["observation_freshness"] == "current"
     assert output["integration"]["weather_api"]["last_update_success"] is True

@@ -39,13 +39,6 @@ def test_wind_direction_missing_or_null(missing: None | str) -> None:
     assert normalize_observations(payload)["wind_dir_deg"] is None
 
 
-def test_packet_reception_actual_and_documented_fields() -> None:
-    """Both confirmed actual and older documented packet reception names parse."""
-    for name in ("packet_reception", "reception"):
-        station = {name: 94}
-        assert station.get("packet_reception", station.get("reception")) == 94
-
-
 def test_units_are_converted_from_reported_metadata() -> None:
     """Convert API units to canonical native units before entity exposure."""
     data = normalize_observations(

@@ -1,6 +1,6 @@
 # Architecture
 
-Reference firmware was inspected from WeatherXM `wg1200-firmware` commit `a30374b045c138dac3f6dd4267ef8eb7390a7670`, in `main/ws/web_server.cpp`. `/api/v1/info` exposes `gateway_id`/`id`, model and firmware, Wi-Fi details, station metadata and `station.packet_reception`. The parser tolerates the older `station.reception` spelling. `/api/v1/observations` returns current fields and unit metadata; `/status` supplies RF link diagnostics and `recent_stations` RSSI/SNR. `/api/v1/history` is a parallel-array API and is intentionally only available through the client; importing it into Recorder is not part of this release.
+Reference firmware was inspected from WeatherXM `wg1200-firmware` commit `a30374b045c138dac3f6dd4267ef8eb7390a7670`, in `main/ws/web_server.cpp`. `/api/v1/info` exposes `gateway_id`/`id`, model and firmware, Wi-Fi details, station metadata and `station.packet_reception`. `/api/v1/observations` returns current fields and unit metadata; `/status` supplies RF link diagnostics and `recent_stations` RSSI/SNR. `/api/v1/history` is a parallel-array API and is intentionally only available through the client; importing it into Recorder is not part of this release.
 
 The config flow supports manual host/port setup and native Home Assistant Zeroconf discovery for `_weatherxm._tcp.local.`. Both paths verify the model and stable gateway ID through `/api/v1/info`. Config entries use the gateway ID for registry identity, and discovery updates the stored endpoint when the address changes.
 

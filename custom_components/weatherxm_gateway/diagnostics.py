@@ -66,7 +66,6 @@ STATION_FIELDS = (
     "station_type",
     "station_fw_version",
     "packet_reception",
-    "reception",
     "pair_mode",
 )
 WIFI_FIELDS = ("status", "rssi")

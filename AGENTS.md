@@ -14,7 +14,7 @@
 - Weather observations and gateway diagnostics use separate coordinators. Options changes reload the config entry.
 - Preserve the single gateway device and the existing config-entry identifier and entity unique IDs. Use the gateway ID, never the station's paired ID, for gateway identity.
 - Preserve user-customized device names. Validate optional API metadata, and prefer the configured host and port for the device's Visit link.
-- Preserve valid numeric zero values, especially 0° wind direction. Support both `station.packet_reception` and the older `station.reception` field.
+- Preserve valid numeric zero values, especially 0° wind direction. Read packet reception from the verified `station.packet_reception` field (or `/status`'s `packet_reception` field).
 - Weather condition is Unknown by default. Estimated conditions are opt-in; do not invent cloud cover, partly-cloudy, or clear-night conditions. See `README.md` for the estimator rules.
 - Keep fast-changing timestamp, uptime, counter, and packet-age entities disabled by default. Counters can reset, so do not give them a monotonic state class without verified reset semantics.
 - Keep diagnostics allowlisted and privacy-conscious. Never dump complete API
